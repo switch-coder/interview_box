@@ -3,13 +3,25 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 3005",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "@mui/icons-material": "^5.6.2",
+    "@mui/material": "^5.8.1",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "@types/uuid": "^8.3.4",
+    "notistack": "^2.0.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.5",
+    "uuid": "^8.3.2"
+  },
+  "resolutions": {
+    "@types/react": "18.0.8",
+    "@types/react-dom": "18.0.3",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
