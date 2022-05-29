@@ -10,4 +10,5 @@ export default interface Todo_Type {
 	status: STATUS_ENUM;
 	created_at: Date;
 	modified_at: Date;
+	deleted_at?: Date;
 }

@@ -8,17 +8,20 @@ import EditIcon from '@mui/icons-material/Edit';
 import { PRIORITY_ENUM } from '../enums/todo_enums';
 import IconButton from '@mui/material/IconButton';
 import Chip from '@mui/material/Chip';
-import { Divider } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import styled from 'styled-components';
+import Divider from '@mui/material/Divider';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AlertType from '../types/alert_types';
 
 type TodoItem = Todo_Type & {
 	expanded: boolean;
 	handleExpanded: (
 		id: string
 	) => (event: React.SyntheticEvent, isExpanded: boolean) => void;
-	handleModify: (
-		todo: Todo_Type
-	) => (e: React.MouseEvent<HTMLButtonElement>) => void;
+	handleModify?: (todo: Todo_Type) => void;
+	handleCompleted?: (id: string) => void;
+	deleteItem?: (id: string) => void;
 };
 const TodoItem = ({
 	id,
@@ -33,6 +36,8 @@ const TodoItem = ({
 	expanded,
 	handleExpanded,
 	handleModify,
+	handleCompleted,
+	deleteItem,
 }: TodoItem) => (
 	<Accordion
 		expanded={expanded}
@@ -50,22 +55,47 @@ const TodoItem = ({
 				))}
 			</Typography>
 			<SummaryActions>
-				<IconButton
-					onClick={handleModify({
-						id,
-						title,
-						content,
-						priority,
-						status,
-						tags,
-						date,
-						created_at,
-						modified_at,
-					})}
-					size="small"
-				>
-					<EditIcon />
-				</IconButton>
+				{handleModify && (
+					<IconButton
+						onClick={(e) => {
+							e.stopPropagation();
+							handleModify({
+								id,
+								title,
+								content,
+								priority,
+								status,
+								tags,
+								date,
+								created_at,
+								modified_at,
+							});
+						}}
+						size="small"
+					>
+						<EditIcon />
+					</IconButton>
+				)}
+				{handleCompleted && (
+					<IconButton
+						onClick={(e) => {
+							e.stopPropagation();
+							handleCompleted(id);
+						}}
+					>
+						<CheckCircleIcon />
+					</IconButton>
+				)}
+				{deleteItem && (
+					<IconButton
+						onClick={(e) => {
+							e.stopPropagation();
+							deleteItem(id);
+						}}
+					>
+						<DeleteIcon />
+					</IconButton>
+				)}
 			</SummaryActions>
 		</AccordionSummary>
 		<Divider />
@@ -94,8 +124,8 @@ const TodoItem = ({
 			)}
 			<Typography gutterBottom variant="caption">
 				<>
-					생성일: {created_at.toString()}&nbsp;&nbsp; 수정일 :{' '}
-					{modified_at.toString()}
+					생성일: {created_at.toDateString()}&nbsp;&nbsp; 수정일 :{' '}
+					{modified_at.toDateString()}
 				</>
 			</Typography>
 		</AccordionDetails>

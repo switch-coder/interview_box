@@ -1,24 +1,24 @@
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import { v4 } from 'uuid';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import Button from '@mui/material/Button';
-import { forwardRef, useCallback, useState } from 'react';
+import { forwardRef, useCallback, useLayoutEffect, useState } from 'react';
 import Chip from '@mui/material/Chip';
 import Todo_Type from '../types/todo_types';
 import { PRIORITY_ENUM, STATUS_ENUM } from '../enums/todo_enums';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import 'react-datepicker/dist/react-datepicker.css';
+import { IconButton } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
-import IconButton from '@mui/material/IconButton';
 import AlertType from '../types/alert_types';
-type CreateTodo_Type = {
+type ModifyTodo_Type = {
 	open: boolean;
+	initialTodo: Todo_Type;
 	handleClose: () => void;
-	addTodo: (todo: Todo_Type) => void;
+	onSaveTodo: (todo: Todo_Type) => void;
 	addAlert: (msg: string, type: AlertType['alertType']) => void;
 };
 
@@ -34,28 +34,14 @@ interface CustomDatePicker {
 		| ((instance: HTMLButtonElement | null) => void);
 }
 
-const CreateTodoDialog = ({
+const ModifyTodoDialog = ({
 	open,
+	initialTodo,
 	handleClose,
-	addTodo,
+	onSaveTodo,
 	addAlert,
-}: CreateTodo_Type) => {
-	const initialValaue = {
-		title: '',
-		content: '',
-		date: undefined,
-		priority: PRIORITY_ENUM.MIDDLE,
-		status: STATUS_ENUM.ACTIVATE,
-	};
-	const [todo, setTodo] = useState<
-		Omit<Todo_Type, 'created_at' | 'modified_at' | 'id' | 'tags'>
-	>({
-		title: '',
-		content: '',
-		date: undefined,
-		priority: PRIORITY_ENUM.MIDDLE,
-		status: STATUS_ENUM.ACTIVATE,
-	});
+}: ModifyTodo_Type) => {
+	const [todo, setTodo] = useState<Todo_Type>(initialTodo);
 	const [tags, setTags] = useState<string[]>([]);
 	const [tagInput, setTagInput] = useState<string>('');
 	const ExampleCustomInput = forwardRef(
@@ -73,15 +59,15 @@ const CreateTodoDialog = ({
 	const removeTag = (event: string) => {
 		setTags((tags) => tags.filter((t) => t !== event));
 	};
-	const onChangeTag = (
-		event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-	) => {
-		setTagInput(event.currentTarget.value);
+	const [isOpen, setIsOpen] = useState(false);
+	const onChangeTag = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setTagInput(e.currentTarget.value);
 	};
 	const addTags = useCallback(
 		(e: React.KeyboardEvent) => {
 			if (e.key == 'Enter' && tagInput != '' && !tags.includes(tagInput)) {
 				setTagInput('');
+
 				setTags((ta) => [...ta, tagInput]);
 			}
 		},
@@ -110,27 +96,25 @@ const CreateTodoDialog = ({
 
 	const onSave = () => {
 		if (!todo.title) {
-			return addAlert('제목을 입력해주세요', 'warning');
+			return addAlert('제목을 입력해주세요.', 'warning');
 		}
-
-		addTodo({
-			id: v4(),
-			...todo,
-			tags,
-			created_at: new Date(),
-			modified_at: new Date(),
-		});
+		onSaveTodo({ ...todo, tags, modified_at: new Date() });
 		setTagInput('');
 		setTags([]);
-		setTodo(initialValaue);
-		addAlert('작성 완료되었습니다.', 'success');
+		addAlert('수정되었습니다.', 'success');
+
 		handleClose();
 	};
+
+	useLayoutEffect(() => {
+		setTodo(initialTodo);
+	}, [initialTodo]);
 	return (
 		<Dialog open={open} onClose={handleClose}>
-			<DialogTitle>할 일 작성하기</DialogTitle>
+			<DialogTitle>할 일 수정하기</DialogTitle>
 			<DialogContent>
 				<TextField
+					value={todo.title}
 					autoFocus
 					margin="dense"
 					id="title"
@@ -140,8 +124,9 @@ const CreateTodoDialog = ({
 					onChange={onChangeTodoInputs}
 				/>
 				<TextField
+					value={todo.content}
 					margin="dense"
-					id="content-multiline"
+					id="content"
 					label="내용"
 					multiline
 					fullWidth
@@ -207,12 +192,6 @@ const CreateTodoDialog = ({
 						긴급
 					</Button>
 				</PriorityContainer>
-				{/* <Button className="example-custom-input" onClick={handleClick}>
-					{todo.date ? todo.date.toString() : '날짜 지정하기'}
-				</Button>
-				{isOpen && (
-					<DatePicker selected={todo.date} onChange={handleChange} inline />
-				)} */}
 				<div className="date_picker_box">
 					<DatePicker
 						selected={todo.date}
@@ -235,18 +214,18 @@ const CreateTodoDialog = ({
 					취소
 				</Button>
 				<Button variant="contained" onClick={onSave}>
-					생성
+					수정
 				</Button>
 			</DialogActions>
 		</Dialog>
 	);
 };
 
-export default CreateTodoDialog;
+export default ModifyTodoDialog;
 
 const DialogContent = styled.div`
 	padding: 10px 40px;
-	#content-multiline {
+	#content {
 		max-height: 140px;
 	}
 	.tag_chip {
