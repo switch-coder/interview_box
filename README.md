@@ -39,30 +39,32 @@
 
 ### 파일 구조
 
-📂src
-┃ ┣ 📂assets
-┃ ┃ ┗ 📜favicon.ico
-┃ ┣ 📂components
-┃ ┃ ┣ 📜Alerts.tsx
-┃ ┃ ┣ 📜CreateTodoDialog.tsx
-┃ ┃ ┣ 📜ModifyTodoDialog.tsx
-┃ ┃ ┣ 📜TodoItem.tsx
-┃ ┃ ┗ 📜TodoListItem.tsx
-┃ ┣ 📂enums
-┃ ┃ ┗ 📜todo_enums.ts
-┃ ┣ 📂types
-┃ ┃ ┣ 📜alert_types.ts
-┃ ┃ ┗ 📜todo_types.ts
-┃ ┣ 📜.DS_Store
-┃ ┣ 📜App.tsx
-┃ ┣ 📜favicon.svg
-┃ ┣ 📜index.css
-┃ ┣ 📜logo.svg
-┃ ┣ 📜main.tsx
-┃ ┗ 📜vite-env.d.ts
-┣ 📜index.html
-┣ 📜package.json
-┣ 📜tsconfig.json
-┣ 📜tsconfig.node.json
-┣ 📜vite.config.ts
-┗ 📜yarn.lock
+```bash
+src
+┃ ┣ assets
+┃ ┃ ┗ favicon.ico
+┃ ┣ components
+┃ ┃ ┣ Alerts.tsx
+┃ ┃ ┣ CreateTodoDialog.tsx
+┃ ┃ ┣ ModifyTodoDialog.tsx
+┃ ┃ ┣ TodoItem.tsx
+┃ ┃ ┗ TodoListItem.tsx
+┃ ┣ enums
+┃ ┃ ┗ todo_enums.ts
+┃ ┣ types
+┃ ┃ ┣ alert_types.ts
+┃ ┃ ┗ todo_types.ts
+┃ ┣ .DS_Store
+┃ ┣ App.tsx
+┃ ┣ favicon.svg
+┃ ┣ index.css
+┃ ┣ logo.svg
+┃ ┣ main.tsx
+┃ ┗ vite-env.d.ts
+┣ index.html
+┣ package.json
+┣ tsconfig.json
+┣ tsconfig.node.json
+┣ vite.config.ts
+┗ yarn.lock
+```
